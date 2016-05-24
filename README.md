@@ -2,5 +2,5 @@
 Set of Machine Learning methods.
 
 # dependencies
-python
-panda
+* python
+* panda
