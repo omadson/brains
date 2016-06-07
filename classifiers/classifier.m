@@ -62,7 +62,7 @@ classdef classifier < handle
                 
                 box on;
                 set(gca,'ydir','normal');
-                contour(xGrid, yGrid, decisionMap, 'Color', 'k','LineWidth',1);
+                contour(xGrid, yGrid, decisionMap, 'Color', 'k','LineWidth',.01);
                 xlim([xInitial-(10*xStep) xFinal+(10*xStep)]);
                 ylim([yInitial-(10*yStep) yFinal+(10*yStep)]);
             end
