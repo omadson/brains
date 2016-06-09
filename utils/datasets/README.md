@@ -6,6 +6,8 @@ To contribute, please make a fork of  the [**brains**](https://github.com/omadso
 
 There are two directories: `artificial/` and `real/` according to the data source.
 
+**Note**: The class column of classification datasets are formated in ordinal pattern.
+
 ## List
 In this point, we have the following databases
 
