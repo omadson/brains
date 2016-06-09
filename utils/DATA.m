@@ -10,17 +10,17 @@ classdef DATA < handle
         normalizedDataset
         outType
         numberOfClasses
-        data
+        out
     end
-    
     methods
-        function obj = DATA(path, name)
+        function obj = DATA(path)
             obj.path    = path;
-            obj.name    = name;
+            diretories = strsplit(path,'/');
+            obj.name = diretories{end};
             obj.load();
         end
         function obj = load(obj)
-            obj.dataset = dlmread(sprintf('%s/%s.txt',obj.path,obj.name));
+            obj.dataset = dlmread(sprintf('../utils/datasets/%s/data.csv',obj.path));
             obj.dataset = obj.dataset(randperm(size(obj.dataset,1)),:);
             obj.normalizedDataset = obj.dataset;
             obj.numberOfClasses = max(obj.dataset(:,end));
@@ -65,17 +65,17 @@ classdef DATA < handle
             count = 0;
             for i=1:length(partition)
                 quantity = round(partition(i) * size(obj.normalizedDataset,1));
-                obj.data{i}.input   = obj.normalizedDataset(count+1:quantity+count,1:end-1);
-                obj.data{i}.output  = obj.normalizedDataset(count+1:quantity+count,end);
+                obj.out{i}.input   = obj.normalizedDataset(count+1:quantity+count,1:end-1);
+                obj.out{i}.output  = obj.normalizedDataset(count+1:quantity+count,end);
                 switch obj.outType
                     case {'OneOutOf','oneoutof','oof'}
-                        out = zeros(size(obj.data{i}.output,1),max(obj.data{i}.output));
-                        for j=1:max(obj.data{i}.output)
-                            out(obj.data{i}.output == j,j) = 1;
+                        out = zeros(size(obj.out{i}.output,1),max(obj.out{i}.output));
+                        for j=1:max(obj.out{i}.output)
+                            out(obj.out{i}.output == j,j) = 1;
                         end
-                        obj.data{i}.output = out;
+                        obj.out{i}.output = out;
                     case {'plusminus','pm'}
-                        obj.data{i}.output(obj.data{i}.output == 2) = -1;
+                        obj.out{i}.output(obj.out{i}.output == 2) = -1;
                     case {'number','n'}
                     otherwise
                 end
