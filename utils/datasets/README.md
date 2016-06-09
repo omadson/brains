@@ -9,10 +9,10 @@ There are two directories: `artificial/` and `real/` according to the data sourc
 ## List
 In this point, we have the following databases
 
-### [Artificial](https://github.com/omadson/brains/tree/utils/datasets/artificial/)
+### [Artificial](https://github.com/omadson/brains/tree/master/utils/datasets/artificial/)
  * Two squares
  * Two squares overlapping
  * Two moons
 
-### [Real](https://github.com/omadson/brains/tree/utils/datasets/real/)
+### [Real](https://github.com/omadson/brains/tree/master/utils/datasets/real)
  * Iris
