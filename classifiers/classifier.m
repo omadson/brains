@@ -31,8 +31,8 @@ classdef classifier < handle
                 xStep    = (xFinal - xInitial)/divisions;
                 yStep    = (yFinal - yInitial)/divisions;
                 
-                [xGrid,yGrid] = meshgrid(xInitial-(10*xStep):xStep:xFinal+(10*xStep),...
-                                         yInitial-(10*yStep):yStep:yFinal+(10*yStep));
+                [xGrid,yGrid] = meshgrid(xInitial-(50*xStep):xStep:xFinal+(50*xStep),...
+                                         yInitial-(50*yStep):yStep:yFinal+(50*yStep));
                 imageSize = size(xGrid);
                 xyGrid = [xGrid(:) yGrid(:)];
                 
@@ -59,12 +59,10 @@ classdef classifier < handle
                     %scatter(cl2{i}(:,1),cl2{i}(:,2),30, marker(i,:),'filled');
                     plot(inputSamples{i}(:,1),inputSamples{i}(:,2),marker{i});
                 end
-                
                 box on;
                 set(gca,'ydir','normal');
                 contour(xGrid, yGrid, decisionMap, 'Color', 'k','LineWidth',.01);
-                xlim([xInitial-(10*xStep) xFinal+(10*xStep)]);
-                ylim([yInitial-(10*yStep) yFinal+(10*yStep)]);
+                hold off;
             end
         end
     end
