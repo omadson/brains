@@ -8,23 +8,49 @@ classdef ESVM < classifier
             obj@classifier(params);
         end
         function obj = train(obj, inputTrain, outputTrain)
+            obj.params.inputTrain = inputTrain;
+            obj.params.outputTrain = outputTrain;
+            outputLength = size(obj.params.outputTrain,1);
+
+            problem.nvars = outputLength;
+            problem.Aeq = obj.params.outputTrain';
+            problem.beq = 0;
+            problem.lb = ones(1,outputLength)*0;
+            problem.ub = ones(1,outputLength)*obj.params.boxConstraints;
+            problem.fitnessfcn = @(individual) obj.Fitness(individual,inputTrain,outputTrain,obj.params.kernelParams);
+            problem.options = gaoptimset('Generations',obj.params.generations,...
+                                         'Display','iter',...
+                                         'StallGenLimit',200);
+            [individual] = ga(problem);
             
+            obj.params.supportVectors = obj.params.inputTrain(individual > 1e-9,:);
+            obj.params.supportVectorsLabels = obj.params.outputTrain(individual> 1e-9,:);
+            obj.params.bias = 0;
+            obj.params.alpha = individual(individual > 1e-9);
         end
         function outputhat = predict(obj,input)
-            outputhat = 0;
+            kernelValues = obj.calcKernel(obj.params.supportVectors',input',...
+                obj.params.kernelParams);
+            outputhat = sign(obj.params.bias + sum(repmat(obj.params.supportVectorsLabels' .*...
+                obj.params.alpha,[size(input,1) 1]) .* kernelValues,2));
         end
     end
-    methods (Hidden = true)
-        function out = activate(obj,val)
-            if strcmp(obj.params.activeFunction, 'linear')
-                out = val;
-            elseif strcmp(obj.params.activeFunction, 'tanh')
-                out = tanh(val);
-            elseif strcmp(obj.params.activeFunction, 'RBF')
-                 out = 1 ./ (1+ exp(-val));
-            else
-                out = val;
+    methods(Static)
+        function out = calcKernel(X1, X2, params)
+            switch params.type
+                case 'linear'
+                    out = X2'*X1;
+                case 'poly'
+                    out = (X2'*X1 + 1).^params.degree;
+                otherwise
+                    out = X2'*X1;
             end
+        end
+        function out = Fitness(individual,inputTrain,outputTrain,params)
+            A = sum(individual);
+            ki = ESVM.calcKernel(inputTrain',inputTrain',params);
+            B = (individual' * individual) .* (outputTrain * outputTrain') .* ki;
+            out = -(1/2)*sum(B(:) + A);
         end
     end
 end

@@ -1,4 +1,4 @@
 tests/
 utils/datasets
-.m~
-.log
+*.m~
+*.log
