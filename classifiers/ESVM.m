@@ -22,17 +22,25 @@ classdef ESVM < classifier
                                          'Display','iter',...
                                          'StallGenLimit',200);
             [individual] = ga(problem);
+            obj.params.supportVectorsIndices = find(individual > 1e-9);
             
-            obj.params.supportVectors = obj.params.inputTrain(individual > 1e-9,:);
-            obj.params.supportVectorsLabels = obj.params.outputTrain(individual> 1e-9,:);
+            obj.params.supportVectors = obj.params.inputTrain(obj.params.supportVectorsIndices,:);
+            obj.params.supportVectorsLabels = obj.params.outputTrain(obj.params.supportVectorsIndices,:);
             obj.params.bias = 0;
-            obj.params.alpha = individual(individual > 1e-9);
+            obj.params.alpha = individual(obj.params.supportVectorsIndices);
         end
         function outputhat = predict(obj,input)
             kernelValues = obj.calcKernel(obj.params.supportVectors',input',...
                 obj.params.kernelParams);
             outputhat = sign(obj.params.bias + sum(repmat(obj.params.supportVectorsLabels' .*...
                 obj.params.alpha,[size(input,1) 1]) .* kernelValues,2));
+        end
+        
+        function plot(obj, varargin)
+            obj.plot@classifier(varargin);
+            hold on;
+            plot(obj.params.supportVectors(:,1), obj.params.supportVectors(:,2), 'o','MarkerSize', 12);
+            legend({'+1', '-1'});
         end
     end
     methods(Static)

@@ -16,9 +16,9 @@ classdef classifier < handle
         end
         function plot(obj, varargin)
             if nargin < 2
-                divisions = 100;
+                divisions = 500;
             else
-                divisions = varargin{1};
+                divisions = cell2mat(varargin{1});
             end
             if size(obj.params.inputTrain,2) ~= 2
                 fprintf('Input training have mor tath two dimensions\n');
@@ -47,12 +47,22 @@ classdef classifier < handle
                 hold on;
                 marker = {'r+','g*','bs','yd'};
                 
-                uniqueLabels = unique(outputHat);
+                
                 
                 
                 if size(obj.params.outputTrain,2) > 1
                     [~,obj.params.outputTrain] = max(obj.params.outputTrain,[],2);
                 end
+                
+                if min(obj.params.outputTrain) == -1
+                    obj.params.outputTrain(obj.params.outputTrain == -1) = 2;
+                end
+                
+                if min(outputHat) == -1
+                    outputHat(outputHat == -1) = 2;
+                end
+                
+                uniqueLabels = unique(outputHat);
                 
                 for i=1:max(uniqueLabels)
                     inputSamples{i} = obj.params.inputTrain(logical(obj.params.outputTrain==uniqueLabels(i)),:);
