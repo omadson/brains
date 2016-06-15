@@ -111,10 +111,8 @@ classdef ESVM < classifier
             xoverKids = zeros(nKids,GenomeLength);
             index = 1;
             for i=1:nKids
-                 %xoverKids(i,:) = thisPopulation(parents(index),:);
                  r1 = parents(index);
                  index = index + 1;
-
 
                  r2 = parents(index);
                  index = index + 1;
