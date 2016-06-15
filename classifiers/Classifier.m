@@ -18,7 +18,7 @@ classdef Classifier < handle
             if nargin < 2
                 divisions = 500;
             else
-                divisions = cell2mat(varargin{1});
+                divisions = varargin{1};
             end
             if size(obj.params.inputTrain,2) ~= 2
                 fprintf('Input training have more tath two dimensions\n');

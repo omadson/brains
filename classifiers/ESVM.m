@@ -23,7 +23,8 @@ classdef ESVM < Classifier
                                          'CreationFcn',@obj.createIndividuals,...
                                          'MutationFcn',@obj.mutateIndividuals,...
                                          'CrossoverFcn', @obj.crossoverIndividuals,...
-                                         'StallGenLimit',200);
+                                         'StallGenLimit',200,...
+                                         'PlotFcns', {@gaplotbestf});
             [individual] = ga(problem);
             obj.params.supportVectorsIndices = find(individual > 1e-9);
             
@@ -40,7 +41,7 @@ classdef ESVM < Classifier
         end
         
         function plot(obj, varargin)
-            obj.plot@Classifier(varargin);
+            obj.plot@Classifier(varargin{1});
             hold on;
             plot(obj.params.supportVectors(:,1), obj.params.supportVectors(:,2), 'o','MarkerSize', 12);
             legend({'+1', '-1'});
