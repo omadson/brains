@@ -21,7 +21,7 @@ classdef classifier < handle
                 divisions = cell2mat(varargin{1});
             end
             if size(obj.params.inputTrain,2) ~= 2
-                fprintf('Input training have mor tath two dimensions\n');
+                fprintf('Input training have more tath two dimensions\n');
             else
                 xInitial = min(obj.params.inputTrain(:,1));
                 xFinal   = max(obj.params.inputTrain(:,1));
@@ -47,9 +47,6 @@ classdef classifier < handle
                 hold on;
                 marker = {'r+','g*','bs','yd'};
                 
-                
-                
-                
                 if size(obj.params.outputTrain,2) > 1
                     [~,obj.params.outputTrain] = max(obj.params.outputTrain,[],2);
                 end
@@ -66,7 +63,6 @@ classdef classifier < handle
                 
                 for i=1:max(uniqueLabels)
                     inputSamples{i} = obj.params.inputTrain(logical(obj.params.outputTrain==uniqueLabels(i)),:);
-                    %scatter(cl2{i}(:,1),cl2{i}(:,2),30, marker(i,:),'filled');
                     plot(inputSamples{i}(:,1),inputSamples{i}(:,2),marker{i});
                 end
                 box on;

@@ -41,7 +41,7 @@ classdef OppositeMaps < handle
         end
         function plot(obj)
             if size(obj.inputSamples,2) ~= 2
-                fprintf('Input training have mor tath two dimensions\n');
+                fprintf('Input training have more tath two dimensions\n');
             else
                 f = figure('Units','inches',...
                           'Position',[2 2 5 4],...
