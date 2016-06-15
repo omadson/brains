@@ -1,4 +1,4 @@
-classdef ELM < classifier
+classdef ELM < Classifier
     %ELM Classe para criação de Extreme Learning Machines
     
     properties
@@ -6,7 +6,7 @@ classdef ELM < classifier
     
     methods
         function obj = ELM(params)
-            obj@classifier(params);
+            obj@Classifier(params);
         end
         function obj = train(obj, inputTrain, outputTrain)
             obj.params.inputTrain  = inputTrain;

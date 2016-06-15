@@ -1,4 +1,4 @@
-classdef classifier < handle
+classdef Classifier < handle
     %CLASSIFIER é a classe padrão para criação classificadores
     
     properties
@@ -6,7 +6,7 @@ classdef classifier < handle
     end
     
     methods
-        function obj = classifier(params)
+        function obj = Classifier(params)
             obj.params = params;
         end
         function errorValue = error(obj, inputTest, outputTest)

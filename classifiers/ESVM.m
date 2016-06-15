@@ -1,11 +1,11 @@
-classdef ESVM < classifier
+classdef ESVM < Classifier
     %ESVM     
     properties
     end
     
     methods
         function obj = ESVM(params)
-            obj@classifier(params);
+            obj@Classifier(params);
         end
         function obj = train(obj, inputTrain, outputTrain)
             obj.params.inputTrain = inputTrain;
@@ -40,7 +40,7 @@ classdef ESVM < classifier
         end
         
         function plot(obj, varargin)
-            obj.plot@classifier(varargin);
+            obj.plot@Classifier(varargin);
             hold on;
             plot(obj.params.supportVectors(:,1), obj.params.supportVectors(:,2), 'o','MarkerSize', 12);
             legend({'+1', '-1'});
