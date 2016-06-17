@@ -7,9 +7,9 @@ classdef KNN < Classifier
         function obj = KNN(params)
             obj@Classifier(params);
         end
-        function obj = train(obj,input,output)
-            obj.params.inputTrain  = input;
-            obj.params.outputTrain = output;
+        function obj = train(obj,inputTrain,outputTrain)
+            obj.params.inputTrain  = inputTrain;
+            obj.params.outputTrain = outputTrain;
         end
         function outputhat = predict(obj,input)
             distances = dist(input, obj.params.inputTrain');
