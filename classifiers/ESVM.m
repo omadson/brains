@@ -23,8 +23,10 @@ classdef ESVM < Classifier
                                          'CreationFcn',@obj.createIndividuals,...
                                          'MutationFcn',@obj.mutateIndividuals,...
                                          'CrossoverFcn', @obj.crossoverIndividuals,...
+                                         'PopulationSize', 10,...
                                          'StallGenLimit',200,...
-                                         'PlotFcns', {@gaplotbestf});
+                                         'Display', 'iter');
+%                                         'PlotFcns', {@gaplotbestf});
             [individual] = ga(problem);
             obj.params.supportVectorsIndices = find(individual > 1e-9);
             
@@ -62,7 +64,7 @@ classdef ESVM < Classifier
             A = sum(individual);
             ki = ESVM.calcKernel(inputTrain',inputTrain',params);
             B = (individual' * individual) .* (outputTrain * outputTrain') .* ki;
-            out = -(1/2)*sum(B(:) + A);
+            out = -(1/2)*sum(B(:)) + A;
         end
         function population = createIndividuals(GenomeLength,FitnessFcn,options)
             totalPopulation = sum(options.PopulationSize);
@@ -80,13 +82,21 @@ classdef ESVM < Classifier
             group = linCon.Aeq;
             child = parent;
             sumAlphaD = group * child';
-            while sumAlphaD >= 1e-9 
-                k = randi([1 length(child)]);
+            positive = find(group == +1);
+            negative = find(group == -1);
+            while abs(sumAlphaD) >= 1e-9
+                if sumAlphaD > 0
+                    k = positive(randi([1 length(positive)]));
+                else
+                    k = negative(randi([1 length(negative)]));
+                end
+                
                 if child(k) > abs(sumAlphaD)
                     child(k) = child(k) - abs(sumAlphaD);
                 else
                     child(k) = 0;
                 end
+                
                 sumAlphaD = group * child';
             end
         end
@@ -94,13 +104,13 @@ classdef ESVM < Classifier
                                     FitnessFcn, state, thisScore,thisPopulation,mutationRate)
             mutationChildren = zeros(length(parents),NVARS);
             linCon = options.LinearConstr;
-            group = linCon.Aeq;
+            %group = linCon.Aeq;
+            
             for i=1:length(parents)
                 parent = thisPopulation(parents(i),:);
-                n = ones(1,2);
-                while n(1) == n(2) && group(n(1)) == group(n(2)) && parent(n(1)) == 0 && parent(n(2)) == 0
-                    n = randi(length(parent),1,2);
-                end
+                
+                n = randperm(length(parent),2);
+                
                 child = parent;
                 child(n(1)) = parent(n(2));
                 child(n(2)) = parent(n(1));
